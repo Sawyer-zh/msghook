@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/srv/android/msghook/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.0.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d29714cc76b38157e3cbd034c66e1ec808eb4c19">
+        <dex dex="/srv/android/msghook/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-25.0.0_8e0bdcac034e24582b5d7779baf5481319565a51.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/srv/android/msghook/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.0.0/jars/libs/internal_impl-25.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="ee5faf4dee5b6a4364bf51587871047dde7c703a">
+        <dex dex="/srv/android/msghook/app/build/intermediates/pre-dexed/debug/internal_impl-25.0.0_2c8dce2d033b32f21ba0fc9c16977cdfb7f22ae5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/srv/android/msghook/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.0.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="53a420cd4f49274db6bd43475f8006ba67ef6bbd">
+        <dex dex="/srv/android/msghook/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-25.0.0_b463cd9f5811c2d57e249cc0b97b231b03bafd62.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/srv/android/msghook/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="75b1f366ff0bbc78f8b1f7cf0dc82e7c53afef6a">
+        <dex dex="/srv/android/msghook/app/build/intermediates/pre-dexed/debug/com.android.support-support-compat-25.0.0_9a87aa86d1f634eb8e469f6ed2d1079da3320ddf.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/srv/android/msghook/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.0.0/jars/libs/internal_impl-25.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="3b61a70884adaf0be3fc06c70c801e3e6df13133">
+        <dex dex="/srv/android/msghook/app/build/intermediates/pre-dexed/debug/internal_impl-25.0.0_08ba821be5149c529b4e312ea504197920cc8197.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/srv/android/msghook/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="76fb65a4b41ea42dab8a1310ed772a2420c96b52">
+        <dex dex="/srv/android/msghook/app/build/intermediates/pre-dexed/debug/com.android.support-support-media-compat-25.0.0_9c2309b3d490492273314acbf92d02cfa8620c7d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/srv/android/msghook/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="8bc45ce1f63d1a391fd38b32a201be5a42f9c95d">
+        <dex dex="/srv/android/msghook/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-25.0.0_8c25b078b029ba7ee2dd40d95aee913f0fcd31c0.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/srv/android/msghook/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.0.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="07daa0b6e1d455c82a38422ffe287c18823d339a">
+        <dex dex="/srv/android/msghook/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-25.0.0_3a3e9f3fd0911eac8510a8510c0676eac68d8ef6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/srv/android/msghook/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.0/jars/libs/internal_impl-25.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="665d21a8a069c96b4d9e8b434f5096d865b4e261">
+        <dex dex="/srv/android/msghook/app/build/intermediates/pre-dexed/debug/internal_impl-25.0.0_582ee1aed2f7908b86aa0c723f0ba218f1f56e3b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/srv/android/msghook/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.0.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="26674000177e45447a0326a6ad84612761199a13">
+        <dex dex="/srv/android/msghook/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-ui-25.0.0_8a0f7a7b621b2299f358fa99808181f25adb2b3b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/sawyer/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/25.0.0/support-annotations-25.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="a22d2cc94da87b254451fa8ed28afc30b4653773">
+        <dex dex="/srv/android/msghook/app/build/intermediates/pre-dexed/debug/support-annotations-25.0.0_34f9ec3011a260f512ac8ec937e5eb1e76dfecb0.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/srv/android/msghook/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.0.0/jars/libs/internal_impl-25.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="e5343c9d19cb19ff55f6b268c7f3fe8c9d224f6f">
+        <dex dex="/srv/android/msghook/app/build/intermediates/pre-dexed/debug/internal_impl-25.0.0_74d81f18005be05d4bb8e96e48a8394444fb1a8e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/srv/android/msghook/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.0/jars/libs/internal_impl-25.0.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="f2e3b9bc1ec25f652e8007ce7774c991e38f6a00">
+        <dex dex="/srv/android/msghook/app/build/intermediates/pre-dexed/debug/internal_impl-25.0.0_b68eabe5b69406baee895e50fbd19f395767b00e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/sawyer/.gradle/caches/modules-2/files-2.1/com.alibaba/fastjson/1.1.70.android/133e74249176e8f5a5cd976bbfa491ac4f8b0c4e/fastjson-1.1.70.android.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="133e74249176e8f5a5cd976bbfa491ac4f8b0c4e">
+        <dex dex="/srv/android/msghook/app/build/intermediates/pre-dexed/debug/fastjson-1.1.70.android_740ce0afb15bef1700d94dbd241086710577bb45.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/srv/android/msghook/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.0.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/srv/android/msghook/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-25.0.0_1fa5355ee07a96a654e09e5181bab956499f22dd.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/srv/android/msghook/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.0.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="4ccbcda5c72027c7f7c14be9ff8640d9cb0d8da0">
+        <dex dex="/srv/android/msghook/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-utils-25.0.0_ed4eca8a7c39e044533347a593717e116c34ca8f.jar" />
+    </item>
+
+</items>
