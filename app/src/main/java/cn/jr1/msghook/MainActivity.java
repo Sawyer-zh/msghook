@@ -1,25 +1,39 @@
 package cn.jr1.msghook;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
 
 import com.alibaba.fastjson.JSON;
+import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.Semaphore;
 
@@ -38,11 +52,32 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String LOCATION = "/sdcard/tmp.dump";
 
+    public static final String SCREENSHOT = "/sdcard/Pictures/Screenshots/tmp.png";
+
+    public static final String SCREENSHOT_PATH = "/sdcard/Pictures/Screenshots/";
+
+    public static final String LAN = "eng";
+
+
+    //160, 344, 162, 80,
+
+    public static final int DES_X = 160;
+
+    public static final int DES_Y = 344;
+
+    public static final int DES_WITH = 162;
+
+    public static final int DES_HEIGHT = 80;
+
     public static final String BUTTON_COLOR = "23 94 E5 FF";
 
     public static final String ALIPAY_SCHEME = "alipays://platformapi/startapp?saId=10000007&qrcode=";
 
+//    public static final String WECHAT_SCHEME = "weixin://wap/pay/";
+
     public static boolean ready = false;
+
+    public static boolean timeOut = false;
 
     public static final short TYPE_NOTIFY = 0;
     public static final short TYPE_COMMAND = 1;
@@ -57,9 +92,13 @@ public class MainActivity extends AppCompatActivity {
     public int height;
 
 
+    private String token;
+
     private static final String TAG = "ServerThread";
 
     ServerThread serverThread;
+
+    private Ocr mOcr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +107,20 @@ public class MainActivity extends AppCompatActivity {
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
+        //always light on
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         width = dm.widthPixels;
         height = dm.heightPixels;
         Log.e("width-display :", String.valueOf(dm.widthPixels));
         Log.e("heigth-display :", String.valueOf(dm.heightPixels));
+
+//        Log.e("123ocr",Ocr.getAmount(null));
+
+
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+//        intent.setData(Uri.parse(WECHAT_SCHEME));
+//
+//        startActivity(intent);
 
 //        int position = width * AXIS_Y + height + 3;
 //        String ret = execShellCmd("dd if=\"" + LOCATION + "\" bs=4 count=1 skip=" + position + " 2>/dev/null ",true);
@@ -84,6 +133,26 @@ public class MainActivity extends AppCompatActivity {
 
         serverThread = new ServerThread();
         serverThread.start();
+
+        //heart beat
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                while (true) {
+//                    //light on the screen
+//                    try {
+//                        Thread.sleep(50000);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    execShellCmd("input tap 1 1", false);
+//                    Log.e("light on" , "execute");
+//                }
+//
+//
+//            }
+//        }).start();
     }
 
     public void clickScreen(int x, int y) {
@@ -168,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
 
                         semaCommand.acquire();
 
-                        execPay(client.getMsg());
+                        execPay(client.getMsg(), client.getLeftAmount());
 
                         semaNotify.acquire();
 
@@ -177,6 +246,8 @@ public class MainActivity extends AppCompatActivity {
                         NotifyBean notifyBean = new NotifyBean();
 
                         notifyBean.setMsg(notifyMsg.getMsg());
+
+                        notifyBean.setStatus(notifyMsg.getStatus());
 
                         String str = JSON.toJSONString(notifyBean);
 
@@ -201,20 +272,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void execPay(String url) {
+    public void execPay(String url, int leftAmount) {
         Intent intent = new Intent();
         intent.setAction("android.intent.action.VIEW");
-        intent.setData(Uri.parse( ALIPAY_SCHEME + url));
+        intent.setData(Uri.parse(ALIPAY_SCHEME + url));
         startActivity(intent);
+
 
         tellIfReady();
 
-        clickScreen(AXIS_X, AXIS_Y);
+        if(timeOut){
+            sendNotification("超时");
+            return;
+        }
+
+
+        if (isSufficient(leftAmount)) {
+            clickScreen(AXIS_X, AXIS_Y);
+        }
+
+
     }
 
 
     private void tellIfReady() {
         // reader
+        timeOut = false;
 
         new Thread(new Runnable() {
             @Override
@@ -231,6 +314,12 @@ public class MainActivity extends AppCompatActivity {
                             semaScreenCap.release();
                             break;
                         }
+
+                        if(timeOut){
+                            semaScreenCap.release();
+                            break;
+                        }
+
                         semaScreenCap.release();
 
 
@@ -242,6 +331,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 
+        int time = 0;
 
         while (true) {
             Log.e("write loop", "entered");
@@ -254,8 +344,15 @@ public class MainActivity extends AppCompatActivity {
 
                 Thread.sleep(100);
 
+                time += 100;
+
                 if (ready) {
 
+                    break;
+                }
+
+                if (time >= 2000) {
+                    timeOut = true;
                     break;
                 }
 
@@ -271,6 +368,11 @@ public class MainActivity extends AppCompatActivity {
         ready = false;
     }
 
+    /**
+     * @param cmd
+     * @param returnHex 返回十六进制
+     * @return
+     */
     private String execShellCmd(String cmd, boolean returnHex) {
 
         String result = "";
@@ -372,6 +474,7 @@ public class MainActivity extends AppCompatActivity {
         return baos.toString();
     }
 
+
     public static String readHexString(InputStream is) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
@@ -383,6 +486,145 @@ public class MainActivity extends AppCompatActivity {
 
         return Hexdump.dumpHexString(baos.toByteArray());
 //        return baos.toString();
+    }
+
+
+    public boolean isSufficient(int leftAmount) {
+
+        screenCap();
+
+        String payAmount = tellAmount();
+
+        if (payAmount.equals("")) {
+            sendNotification("解析金额失败");
+            return false;
+        }
+
+
+        int amount = (int) (Float.parseFloat(payAmount.substring(1)) * 100);
+
+        if (leftAmount >= amount) {
+            return true;
+        }
+
+
+        sendNotification("金额不足!");
+
+        execShellCmd("input keyevent 4", false);
+
+        return false;
+
+    }
+
+
+    // tesseract to get the result
+    public String tellAmount() {
+
+        Bitmap bitmap = null;
+
+        try {
+            FileInputStream fis = new FileInputStream(SCREENSHOT);
+            bitmap = BitmapFactory.decodeStream(fis);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+
+        Bitmap bmp = Bitmap.createBitmap(bitmap, DES_X, DES_Y, DES_WITH, DES_HEIGHT, null,
+                false);
+
+
+        File file = new File(SCREENSHOT);
+        if (file.exists()) {
+            file.delete();
+        }
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, ((OutputStream) fileOutputStream));//设置PNG的话，透明区域不会变成黑色
+
+            fileOutputStream.close();
+            System.out.println("----------save success-------------------");
+        } catch (Exception v0) {
+            v0.printStackTrace();
+        }
+
+//        mOcr.fromBaiduOcr();
+
+
+        //tess
+//        TessBaseAPI baseApi = new TessBaseAPI();
+////        baseApi.setDebug(true);
+//        baseApi.setDebug(false);
+//        // 使用默认语言初始化BaseApi
+//        baseApi.init(SCREENSHOT_PATH, LAN);
+//        baseApi.setImage(bmp);
+//        // 获取返回值
+//        String recognizedText = baseApi.getUTF8Text();
+//        Log.e("result", recognizedText);
+
+        return Ocr.getAmount(null);
+
+
+    }
+
+
+    // screen cap
+    public void screenCap() {
+
+        execShellCmd("screencap -p " + SCREENSHOT, false);
+
+
+        //
+//
+//        View decorView = this.getWindow().getDecorView();
+//        decorView.setDrawingCacheEnabled(true);
+//        decorView.buildDrawingCache();
+//        //获取屏幕整张图片
+//        Bitmap bitmap = decorView.getDrawingCache();
+//        if (bitmap != null) {
+//            //需要截取的长和宽
+////            int outWidth = view.getWidth();
+////            int outHeight = view.getHeight();
+////            获取需要截图部分的在屏幕上的坐标(view的左上角坐标）
+////            int[] viewLocationArray = new int[2];
+////            view.getLocationOnScreen(viewLocationArray)；
+//            //从屏幕整张图片中截取指定区域
+//            bitmap = Bitmap.createBitmap(bitmap, viewLocationArray[0], viewLocationArray[1], outWidth, outHeight);
+//        }
+
+//        File file = new File("/sdcard/Pictures/Screenshots/tmp.png");
+//        if(file.exists()) {
+//            file.delete();
+//        }
+//        try {
+//            FileOutputStream fileOutputStream = new FileOutputStream(file);
+//            bmp.compress(Bitmap.CompressFormat.PNG, 100, ((OutputStream)fileOutputStream));//设置PNG的话，透明区域不会变成黑色
+//
+//            fileOutputStream.close();
+//            System.out.println("----------save success-------------------");
+//        }
+//        catch(Exception v0) {
+//            v0.printStackTrace();
+//        }
+
+    }
+
+
+    public void sendNotification(String content) {
+        NotificationManager notiManager = (NotificationManager)
+
+                getSystemService(Context.NOTIFICATION_SERVICE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Send Notification")
+                .setContentText(content);
+        notiManager.notify(11111, builder.build());
+
+
     }
 
 

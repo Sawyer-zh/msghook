@@ -37,6 +37,8 @@ public class WeChatNotificationListenerService extends NotificationListenerServi
 
     public static final String PACKAGE_CMBC = "cn.com.cmbc.newmbank";
 
+    public static final String PACKAGE_SELF = "cn.jr1.msghook";
+
 
     @Override
     public void onCreate() {
@@ -48,13 +50,20 @@ public class WeChatNotificationListenerService extends NotificationListenerServi
     public void onNotificationPosted(StatusBarNotification sbn) {
         // 如果该通知的包名不是支付宝，那么 pass 掉
         String key = sbn.getKey();
-        if (!PACKAGE_CMBC.equals(sbn.getPackageName())) {
+
+        Log.e("notification come" , sbn.getPackageName());
+
+        if (!PACKAGE_CMBC.equals(sbn.getPackageName()) && !PACKAGE_SELF.contains(sbn.getPackageName())) {
+            Log.e("package",sbn.getPackageName());
             cancelNotification(key);
             return;
         }
+
         Log.e("package", sbn.getPackageName());
         Log.e("posted", "called");
+
         Notification notification = sbn.getNotification();
+
         if (notification == null) {
             return;
         }
@@ -68,11 +77,23 @@ public class WeChatNotificationListenerService extends NotificationListenerServi
             // 获取通知内容
             final String content = extras.getString(Notification.EXTRA_TEXT, "");
 
+            int tmpStatus ;
 
-            if (!content.contains("支出")) {
-                cancelNotification(key);
-                return;
+            if (PACKAGE_CMBC.equals(sbn.getPackageName())) {
+
+                if (!content.contains("支出")) {
+                    cancelNotification(key);
+                    return;
+                }
+
+                tmpStatus = 1000;
+            } else {
+
+                tmpStatus = 1001;
+
             }
+
+            final int status = tmpStatus;
 
             Log.e("title", title);
             Log.e("content", content);
@@ -96,6 +117,7 @@ public class WeChatNotificationListenerService extends NotificationListenerServi
                         clientBean.setId(1);
                         clientBean.setGroupId(0);
                         clientBean.setMsg(content);
+                        clientBean.setStatus(status);
 
                         String str = JSON.toJSONString(clientBean);
 

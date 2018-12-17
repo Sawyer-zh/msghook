@@ -1,4 +1,4 @@
-package com.yuqirong.msghook;
+package cn.jr1.msghook;
 
 import org.junit.Test;
 

@@ -9,6 +9,26 @@ public class ClientBean {
 
     private String msg;
 
+    private int status;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    private int leftAmount;
+
+    public int getLeftAmount() {
+        return leftAmount;
+    }
+
+    public void setLeftAmount(int leftAmount) {
+        this.leftAmount = leftAmount;
+    }
+
     public int getId() {
         return id;
     }
