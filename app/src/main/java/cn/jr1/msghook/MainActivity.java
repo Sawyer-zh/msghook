@@ -106,52 +106,16 @@ public class MainActivity extends AppCompatActivity {
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        //always light on
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         width = dm.widthPixels;
         height = dm.heightPixels;
         Log.e("width-display :", String.valueOf(dm.widthPixels));
         Log.e("heigth-display :", String.valueOf(dm.heightPixels));
 
-//        Log.e("123ocr",Ocr.getAmount(null));
-
-
-//        Intent intent = new Intent(Intent.ACTION_VIEW);
-//        intent.setData(Uri.parse(WECHAT_SCHEME));
-//
-//        startActivity(intent);
-
-//        int position = width * AXIS_Y + height + 3;
-//        String ret = execShellCmd("dd if=\"" + LOCATION + "\" bs=4 count=1 skip=" + position + " 2>/dev/null ",true);
-
-//        writeMethod1(ret);
-
-//        String ret = execShellCmd("");
-//        Log.e("read ret:", ret + "this is ret");
-
 
         serverThread = new ServerThread();
         serverThread.start();
 
-        //heart beat
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                while (true) {
-//                    //light on the screen
-//                    try {
-//                        Thread.sleep(50000);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    execShellCmd("input tap 1 1", false);
-//                    Log.e("light on" , "execute");
-//                }
-//
-//
-//            }
-//        }).start();
     }
 
     public void clickScreen(int x, int y) {
@@ -543,26 +507,11 @@ public class MainActivity extends AppCompatActivity {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.PNG, 100, ((OutputStream) fileOutputStream));//设置PNG的话，透明区域不会变成黑色
-
             fileOutputStream.close();
             System.out.println("----------save success-------------------");
         } catch (Exception v0) {
             v0.printStackTrace();
         }
-
-//        mOcr.fromBaiduOcr();
-
-
-        //tess
-//        TessBaseAPI baseApi = new TessBaseAPI();
-////        baseApi.setDebug(true);
-//        baseApi.setDebug(false);
-//        // 使用默认语言初始化BaseApi
-//        baseApi.init(SCREENSHOT_PATH, LAN);
-//        baseApi.setImage(bmp);
-//        // 获取返回值
-//        String recognizedText = baseApi.getUTF8Text();
-//        Log.e("result", recognizedText);
 
         return Ocr.getAmount(null);
 
@@ -574,40 +523,6 @@ public class MainActivity extends AppCompatActivity {
     public void screenCap() {
 
         execShellCmd("screencap -p " + SCREENSHOT, false);
-
-
-        //
-//
-//        View decorView = this.getWindow().getDecorView();
-//        decorView.setDrawingCacheEnabled(true);
-//        decorView.buildDrawingCache();
-//        //获取屏幕整张图片
-//        Bitmap bitmap = decorView.getDrawingCache();
-//        if (bitmap != null) {
-//            //需要截取的长和宽
-////            int outWidth = view.getWidth();
-////            int outHeight = view.getHeight();
-////            获取需要截图部分的在屏幕上的坐标(view的左上角坐标）
-////            int[] viewLocationArray = new int[2];
-////            view.getLocationOnScreen(viewLocationArray)；
-//            //从屏幕整张图片中截取指定区域
-//            bitmap = Bitmap.createBitmap(bitmap, viewLocationArray[0], viewLocationArray[1], outWidth, outHeight);
-//        }
-
-//        File file = new File("/sdcard/Pictures/Screenshots/tmp.png");
-//        if(file.exists()) {
-//            file.delete();
-//        }
-//        try {
-//            FileOutputStream fileOutputStream = new FileOutputStream(file);
-//            bmp.compress(Bitmap.CompressFormat.PNG, 100, ((OutputStream)fileOutputStream));//设置PNG的话，透明区域不会变成黑色
-//
-//            fileOutputStream.close();
-//            System.out.println("----------save success-------------------");
-//        }
-//        catch(Exception v0) {
-//            v0.printStackTrace();
-//        }
 
     }
 
@@ -622,8 +537,7 @@ public class MainActivity extends AppCompatActivity {
                 .setContentTitle("Send Notification")
                 .setContentText(content);
         notiManager.notify(11111, builder.build());
-
-
+        
     }
 
 
