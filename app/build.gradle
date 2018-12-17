@@ -20,7 +20,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.rmtheis:tess-two:9.0.0'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.alibaba:fastjson:1.1.70.android'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

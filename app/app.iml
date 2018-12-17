@@ -135,7 +135,6 @@
     <orderEntry type="library" name="Gradle: com.android.support:support-fragment-25.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-media-compat-25.0.0" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:/srv/android/msghook/app/libs/aip-java-sdk-4.8.0.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="Gradle: com.rmtheis:tess-two-9.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: javax.annotation:javax.annotation-api:1.2@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:appcompat-v7-25.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:animated-vector-drawable-25.0.0" level="project" />
