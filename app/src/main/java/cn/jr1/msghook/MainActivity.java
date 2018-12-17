@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.alibaba.fastjson.JSON;
-import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
