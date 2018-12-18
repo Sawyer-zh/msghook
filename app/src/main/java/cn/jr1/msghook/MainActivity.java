@@ -244,8 +244,9 @@ public class MainActivity extends AppCompatActivity {
 
         tellIfReady();
 
-        if(timeOut){
+        if (timeOut) {
             sendNotification("超时");
+            execShellCmd("input keyevent 4", false);
             return;
         }
 
@@ -278,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         }
 
-                        if(timeOut){
+                        if (timeOut) {
                             semaScreenCap.release();
                             break;
                         }
@@ -537,7 +538,7 @@ public class MainActivity extends AppCompatActivity {
                 .setContentTitle("Send Notification")
                 .setContentText(content);
         notiManager.notify(11111, builder.build());
-        
+
     }
 
 
