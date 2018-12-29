@@ -10,11 +10,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
 
 import com.alibaba.fastjson.JSON;
 
@@ -31,9 +28,12 @@ import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 
@@ -86,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
     //    public static final int AXIS_X = 270;
 //    public static final int AXIS_Y = 600;
     public static final int AXIS_Y = 800;
+
+    public static final long SLEEP_TIME = 300000;
+
+    public static int timerState = 0;
 
     public int width;
     public int height;
@@ -200,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
 
                         semaCommand.acquire();
 
-                        execPay(client.getMsg(), client.getLeftAmount());
+                        execPay(client);
 
                         semaNotify.acquire();
 
@@ -235,24 +239,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void execPay(String url, int leftAmount) {
-        Intent intent = new Intent();
-        intent.setAction("android.intent.action.VIEW");
-        intent.setData(Uri.parse(ALIPAY_SCHEME + url));
-        startActivity(intent);
+    public void execPay(ClientBean clientMsg) {
+
+        if (clientMsg.getPreFlag() == 1) {
 
 
-        tellIfReady();
-
-        if (timeOut) {
-            sendNotification("超时");
-            execShellCmd("input keyevent 4", false);
-            return;
-        }
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.VIEW");
+            intent.setData(Uri.parse(ALIPAY_SCHEME + clientMsg.getMsg()));
+            startActivity(intent);
 
 
-        if (isSufficient(leftAmount)) {
+            tellIfReady();
+
+            if (timeOut) {
+                sendNotification("超时" , "1001");
+                execShellCmd("input keyevent 4", false);
+                return;
+            }
+
+            isSufficient(clientMsg.getLeftAmount());
+
+        } else {
+            // actually pay
             clickScreen(AXIS_X, AXIS_Y);
+            //reset timer
+            stopTimer();
         }
 
 
@@ -460,7 +472,7 @@ public class MainActivity extends AppCompatActivity {
         String payAmount = tellAmount();
 
         if (payAmount.equals("")) {
-            sendNotification("解析金额失败");
+            sendNotification("解析金额失败" ,"1001");
             return false;
         }
 
@@ -468,11 +480,16 @@ public class MainActivity extends AppCompatActivity {
         int amount = (int) (Float.parseFloat(payAmount.substring(1)) * 100);
 
         if (leftAmount >= amount) {
+
+            sendNotification(payAmount.substring(1) + "元" , "1000");
+
+            startTimer(SLEEP_TIME);
+
             return true;
         }
 
 
-        sendNotification("金额不足!");
+        sendNotification("金额不足!","1001");
 
         execShellCmd("input keyevent 4", false);
 
@@ -528,19 +545,49 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void sendNotification(String content) {
+    public void sendNotification(String content,String title) {
         NotificationManager notiManager = (NotificationManager)
 
                 getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Send Notification")
+                .setContentTitle(title)
                 .setContentText(content);
         notiManager.notify(11111, builder.build());
 
     }
 
+    // timer task
 
+    Timer timer = null;
+    SleepReturnTask task = null;
+
+    class SleepReturnTask extends TimerTask{
+        @Override
+        public void run() {
+            execShellCmd("input keyevent 4" , false);
+            stopTimer();
+        }
+    }
+
+    public void startTimer(long ms){
+        if(timer == null){
+            timer = new Timer();
+        }
+        if(task == null){
+            task = new SleepReturnTask();
+        }
+        timer.schedule(new SleepReturnTask(),ms);
+        timerState = 1;
+    }
+
+    public void stopTimer(){
+        timer.cancel();
+        task.cancel();
+        timer = null;
+        task = null;
+        timerState =0;
+    }
 }
 

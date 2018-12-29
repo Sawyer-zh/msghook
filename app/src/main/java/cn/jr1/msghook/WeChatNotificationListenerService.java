@@ -89,7 +89,7 @@ public class WeChatNotificationListenerService extends NotificationListenerServi
                 tmpStatus = 1000;
             } else {
 
-                tmpStatus = 1001;
+                tmpStatus = Integer.parseInt(title);
 
             }
 

@@ -11,6 +11,17 @@ public class ClientBean {
 
     private int status;
 
+    // prepare pay
+    private int preFlag;
+
+    public int getPreFlag() {
+        return preFlag;
+    }
+
+    public void setPreFlag(int preFlag) {
+        this.preFlag = preFlag;
+    }
+
     public int getStatus() {
         return status;
     }
